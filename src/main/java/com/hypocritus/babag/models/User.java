@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     private String username;
     private long earnings;
@@ -15,14 +15,33 @@ public class User {
     private List<Task> tasks;
     private int travelDays;
     private int sickDays;
-    private Month birthDay;
+    private Month birthMonth;
     //TODO achievements
 
-    public long getUserId() {
+
+    public User(String username, Month birthMonth) {
+        this.username = username;
+        this.birthMonth = birthMonth;
+    }
+
+    public void update (User user) {
+        if (user.getUsername() != null){
+            this.username = user.getUsername();
+        }
+        if (user.getBirthMonth() != null){
+            this.birthMonth = user.getBirthMonth();
+        }
+    }
+
+    public User() {
+
+    }
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -66,11 +85,11 @@ public class User {
         this.sickDays = sickDays;
     }
 
-    public Month getBirthDay() {
-        return birthDay;
+    public Month getBirthMonth() {
+        return birthMonth;
     }
 
-    public void setBirthDay(Month birthDay) {
-        this.birthDay = birthDay;
+    public void setBirthMonth(Month birthDay) {
+        this.birthMonth = birthDay;
     }
 }

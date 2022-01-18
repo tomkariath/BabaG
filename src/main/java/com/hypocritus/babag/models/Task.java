@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class Task {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskId;
     private String taskName;
     private int currentScore;
