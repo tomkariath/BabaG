@@ -1,7 +1,7 @@
 package com.hypocritus.babag.models;
 
 public enum Status {
+    NOT_STARTED,
     BEHIND,
-    DANGER,
     ON_TRACK
 }

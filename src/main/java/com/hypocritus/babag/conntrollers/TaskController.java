@@ -1,42 +1,68 @@
 package com.hypocritus.babag.conntrollers;
 
 import com.hypocritus.babag.models.Task;
-import com.hypocritus.babag.models.User;
-import com.hypocritus.babag.repositories.TaskRepo;
-import com.hypocritus.babag.repositories.UserRepo;
+import com.hypocritus.babag.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class TaskController {
 
-    private final UserRepo userRepo;
-    private final TaskRepo taskRepo;
+    TaskService taskService;
 
     @Autowired
-    public TaskController(UserRepo userRepo, TaskRepo taskRepo) {
-        this.userRepo = userRepo;
-        this.taskRepo = taskRepo;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @GetMapping("/users/{userId}/tasks")
-    ResponseEntity<List<Task>> getUser (@PathVariable("userId") Long userId){
-        Optional<User> userOptional = userRepo.findById(userId);
-
-        if (userOptional.isPresent()){
-            List<Task> tasks = userOptional.get().getTasks();
-
-            return new ResponseEntity<>(tasks, HttpStatus.OK);
+    ResponseEntity<List<Task>> getUserTasks (@PathVariable("userId") Long userId){
+        List<Task> tasks = taskService.getTasksOfUser(userId);
+        if (tasks == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
+    }
+
+    @GetMapping("/tasks/{taskId}")
+    ResponseEntity<Task> getTask (@PathVariable("taskId") Long taskId){
+        Task task = taskService.getTaskById(taskId);
+
+        if (task == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(task, HttpStatus.OK);
+    }
+
+    @PostMapping("/users/{userId}/tasks")
+    ResponseEntity<Task> createNewUserTask (@PathVariable("userId") Long userId, @RequestBody Task task){
+        Task newTask = taskService.creatNewTaskForUser(userId, task);
+
+        if (newTask == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(newTask, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/tasks/{taskId}")
+    ResponseEntity<Task> updateTask (@PathVariable("taskId") Long taskId, @RequestBody Task updatedTask){
+        Task task = taskService.updateTask(taskId, updatedTask);
+
+        if (task == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(task, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/users/{userId}/tasks/{taskId}")
+    ResponseEntity<HttpStatus> deleteTask (@PathVariable("userId") long userId, @PathVariable("taskId") long taskId){
+        if (taskService.deleteTaskFromUser(userId, taskId)){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

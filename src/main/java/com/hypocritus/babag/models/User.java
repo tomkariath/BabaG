@@ -10,14 +10,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     private String username;
-    private long earnings;
-    @OneToMany
+    private Long earnings;
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Task> tasks;
-    private int travelDays;
-    private int sickDays;
+    private Integer travelDays;
+    private Integer sickDays;
     private Month birthMonth;
     //TODO achievements
 
+    public User() {}
 
     public User(String username, Month birthMonth) {
         this.username = username;
@@ -26,23 +27,29 @@ public class User {
 
     public void update (User user) {
         if (user.getUsername() != null){
-            this.username = user.getUsername();
+            setUsername(user.getUsername());
+        }
+        if (user.getEarnings() != null){
+            setEarnings(user.getEarnings());
+        }
+        if (user.getTravelDays() != null){
+            setTravelDays(user.getTravelDays());
+        }
+        if (user.getSickDays() != null){
+            setSickDays(user.getSickDays());
         }
         if (user.getBirthMonth() != null){
-            this.birthMonth = user.getBirthMonth();
+            setBirthMonth(user.getBirthMonth());
         }
     }
 
-    public User() {
-
+    public void reset () {
+        setTravelDays(0);
+        setSickDays(0);
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void resetEarnings () {
+        setEarnings(0L);
     }
 
     public String getUsername() {
@@ -53,11 +60,11 @@ public class User {
         this.username = username;
     }
 
-    public long getEarnings() {
+    public Long getEarnings() {
         return earnings;
     }
 
-    public void setEarnings(long earnings) {
+    public void setEarnings(Long earnings) {
         this.earnings = earnings;
     }
 
@@ -65,23 +72,19 @@ public class User {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public int getTravelDays() {
+    public Integer getTravelDays() {
         return travelDays;
     }
 
-    public void setTravelDays(int travelDays) {
+    public void setTravelDays(Integer travelDays) {
         this.travelDays = travelDays;
     }
 
-    public int getSickDays() {
+    public Integer getSickDays() {
         return sickDays;
     }
 
-    public void setSickDays(int sickDays) {
+    public void setSickDays(Integer sickDays) {
         this.sickDays = sickDays;
     }
 

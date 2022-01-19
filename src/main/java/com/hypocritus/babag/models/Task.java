@@ -1,9 +1,6 @@
 package com.hypocritus.babag.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Task {
@@ -11,17 +8,43 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskId;
     private String taskName;
-    private int currentScore;
-    private int completionScore;
+    private Integer currentScore;
+    private Integer completionScore;
     private Status status;
-    private boolean completion;
+    private Boolean completed;
 
-    public long getTaskId() {
-        return taskId;
+    public Task(){}
+
+    public Task (String taskName, int completionScore) {
+        this.taskName = taskName;
+        this.currentScore =0;
+        this. completionScore = completionScore;
+        this.status = Status.NOT_STARTED;
+        this.completed = false;
     }
 
-    public void setTaskId(long taskId) {
-        this.taskId = taskId;
+    public void update (Task task) {
+        if (task.getTaskName() != null){
+            setTaskName(task.getTaskName());
+        }
+        if (task.getCurrentScore() != null){
+            setCurrentScore(task.getCurrentScore());
+        }
+        if (task.getCompletionScore() != null){
+            setCompletionScore(task.getCompletionScore());
+        }
+        if (task.getStatus() != null){
+            setStatus(task.getStatus());
+        }
+        if (task.isCompleted() != null){
+            setCompleted(task.isCompleted());
+        }
+    }
+
+    public void reset (){
+        setCurrentScore(0);
+        setStatus(Status.NOT_STARTED);
+        setCompleted(false);
     }
 
     public String getTaskName() {
@@ -32,19 +55,19 @@ public class Task {
         this.taskName = taskName;
     }
 
-    public int getCurrentScore() {
+    public Integer getCurrentScore() {
         return currentScore;
     }
 
-    public void setCurrentScore(int currentScore) {
+    public void setCurrentScore(Integer currentScore) {
         this.currentScore = currentScore;
     }
 
-    public int getCompletionScore() {
+    public Integer getCompletionScore() {
         return completionScore;
     }
 
-    public void setCompletionScore(int completionScore) {
+    public void setCompletionScore(Integer completionScore) {
         this.completionScore = completionScore;
     }
 
@@ -56,11 +79,11 @@ public class Task {
         this.status = status;
     }
 
-    public boolean isCompletion() {
-        return completion;
+    public Boolean isCompleted() {
+        return completed;
     }
 
-    public void setCompletion(boolean completion) {
-        this.completion = completion;
+    public void setCompleted(Boolean completion) {
+        this.completed = completion;
     }
 }
