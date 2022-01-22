@@ -1,5 +1,8 @@
 package com.hypocritus.babag.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +15,10 @@ public class Task {
     private Integer completionScore;
     private Status status;
     private Boolean completed;
+
+    @JsonBackReference
+    @ManyToOne
+    private User user;
 
     public Task(){}
 
@@ -85,5 +92,9 @@ public class Task {
 
     public void setCompleted(Boolean completion) {
         this.completed = completion;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

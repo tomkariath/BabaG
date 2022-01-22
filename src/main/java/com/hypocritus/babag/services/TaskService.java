@@ -62,13 +62,13 @@ public class TaskService {
         return task;
     }
 
-    public boolean deleteTaskFromUser(long userId, long taskId){
-        Optional<User> userOptional = userRepo.findById(userId);
+    public boolean deleteTaskFromUser(long taskId){
         Optional<Task> taskOptional = taskRepo.findById(taskId);
 
-        if (userOptional.isPresent() && taskOptional.isPresent()){
-            User user =  userOptional.get();
-            user.getTasks().remove(taskOptional.get());
+        if (taskOptional.isPresent()){
+            Task task = taskOptional.get();
+            User user =  task.getUser();
+            user.getTasks().remove(task);
             userRepo.save(user);
             return true;
         }

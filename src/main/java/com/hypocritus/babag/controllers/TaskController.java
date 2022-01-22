@@ -1,4 +1,4 @@
-package com.hypocritus.babag.conntrollers;
+package com.hypocritus.babag.controllers;
 
 import com.hypocritus.babag.models.Task;
 import com.hypocritus.babag.services.TaskService;
@@ -58,9 +58,9 @@ public class TaskController {
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
-    @DeleteMapping("/users/{userId}/tasks/{taskId}")
-    ResponseEntity<HttpStatus> deleteTask (@PathVariable("userId") long userId, @PathVariable("taskId") long taskId){
-        if (taskService.deleteTaskFromUser(userId, taskId)){
+    @DeleteMapping("tasks/{taskId}")
+    ResponseEntity<HttpStatus> deleteTask (@PathVariable("taskId") long taskId){
+        if (taskService.deleteTaskFromUser(taskId)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

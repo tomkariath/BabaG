@@ -1,4 +1,4 @@
-package com.hypocritus.babag.conntrollers;
+package com.hypocritus.babag.controllers;
 
 import com.hypocritus.babag.models.User;
 import com.hypocritus.babag.services.UserService;
@@ -27,6 +27,16 @@ public class UserController {
     @GetMapping("/users/{userId}")
     ResponseEntity<User> getUser (@PathVariable("userId") Long userId){
         User user = userService.getUser(userId);
+
+        if (user == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{userId}/calculate-earnings")
+    ResponseEntity<User> calculateUserEarnings (@PathVariable("userId") Long userId){
+        User user = userService.calculateEarnings(userId);
 
         if (user == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

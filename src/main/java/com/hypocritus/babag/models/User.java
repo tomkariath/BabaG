@@ -16,6 +16,7 @@ public class User {
     private Integer travelDays;
     private Integer sickDays;
     private Month birthMonth;
+    private Month earningCalculatedMonth;
     //TODO achievements
 
     public User() {}
@@ -40,6 +41,9 @@ public class User {
         }
         if (user.getBirthMonth() != null){
             setBirthMonth(user.getBirthMonth());
+        }
+        if (user.getEarningCalculatedMonth() != null){
+            setEarningCalculatedMonth(user.getEarningCalculatedMonth());
         }
     }
 
@@ -94,5 +98,17 @@ public class User {
 
     public void setBirthMonth(Month birthDay) {
         this.birthMonth = birthDay;
+    }
+
+    public Month getEarningCalculatedMonth() {
+        return earningCalculatedMonth;
+    }
+
+    public void setEarningCalculatedMonth(Month earningCalculatedMonth) {
+        this.earningCalculatedMonth = earningCalculatedMonth;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }
