@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.hypocritus.babag.models.User;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GroupUserSerializer extends StdSerializer<List<User>> {

@@ -1,11 +1,16 @@
 package com.hypocritus.babag.services;
 
+import com.hypocritus.babag.models.Status;
 import com.hypocritus.babag.models.Task;
 import com.hypocritus.babag.models.User;
 import com.hypocritus.babag.repositories.TaskRepo;
 import com.hypocritus.babag.repositories.UserRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +79,33 @@ public class TaskService {
         }
         else {
             return false;
+        }
+    }
+
+    public void calculateTaskStatus (long taskId){
+        Optional<Task> taskOptional = taskRepo.findById(taskId);
+
+        if (taskOptional.isPresent()){
+            Task task = taskOptional.get();
+
+            LocalDate today = LocalDate.now();
+            Month thisMonth = today.getMonth();
+            int thisYear = today.getYear();
+            YearMonth yearMonth = YearMonth.of(thisYear, thisMonth);
+            int daysLeft = yearMonth.lengthOfMonth() - today.getDayOfMonth();
+
+            int completionLeft = task.getCompletionScore() - task.getCurrentScore();
+
+            if (completionLeft < 1){
+                task.isCompleted();
+                task.setStatus(Status.ON_TRACK);
+            }
+            else if (completionLeft >= daysLeft){
+                task.setStatus(Status.BEHIND);
+            }
+            else {
+                task.setStatus(Status.ON_TRACK);
+            }
         }
     }
 }
